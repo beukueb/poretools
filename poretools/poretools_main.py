@@ -49,7 +49,7 @@ def run_subtool(parser, args):
 class ArgumentParserWithDefaults(argparse.ArgumentParser):
     def __init__(self, *args, **kwargs):
         super(ArgumentParserWithDefaults, self).__init__(*args, **kwargs)
-	self.add_argument("-q", "--quiet", help="Do not output warnings to stderr",
+        self.add_argument("-q", "--quiet", help="Do not output warnings to stderr",
                         action="store_true",
                         dest="quiet")
 
