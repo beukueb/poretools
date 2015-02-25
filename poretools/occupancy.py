@@ -1,4 +1,4 @@
-import Fast5File
+from . import Fast5File
 from time import strftime, localtime
 from collections import defaultdict, Counter
 import rpy2.robjects.lib.ggplot2 as gg
@@ -43,8 +43,8 @@ def plot_read_count(parser, args, tot_reads_per_pore):
 			pore_values.append(0)		
 	
 	# make a data frame of the lists
-	d = {'rownum': robjects.IntVector(range(1,17)*32),
-		 'colnum': robjects.IntVector(sorted(range(1,33)*16)),
+	d = {'rownum': robjects.IntVector(list(range(1,17))*32),
+		 'colnum': robjects.IntVector(sorted(list(range(1,33))*16)),
 		 'tot_reads': robjects.IntVector(pore_values),
 		 'labels': robjects.IntVector(flowcell_layout)
 		 }
@@ -76,7 +76,7 @@ def plot_read_count(parser, args, tot_reads_per_pore):
 		pp.plot()
 		# keep the plot open until user hits enter
 		print('Type enter to exit.')
-		raw_input()
+		input()
 
 
 def plot_total_bp(parser, args, tot_bp_per_pore):
@@ -98,8 +98,8 @@ def plot_total_bp(parser, args, tot_bp_per_pore):
 			pore_values.append(0)		
 	
 	# make a data frame of the lists
-	d = {'rownum': robjects.IntVector(range(1,17)*32),
-		 'colnum': robjects.IntVector(sorted(range(1,33)*16)),
+	d = {'rownum': robjects.IntVector(list(range(1,17))*32),
+		 'colnum': robjects.IntVector(sorted(list(range(1,33))*16)),
 		 'log10_tot_bp': robjects.IntVector(pore_values),
 		 'labels': robjects.IntVector(flowcell_layout)
 		 }
@@ -131,7 +131,7 @@ def plot_total_bp(parser, args, tot_bp_per_pore):
 		pp.plot()
 		# keep the plot open until user hits enter
 		print('Type enter to exit.')
-		raw_input()
+		input()
 
 
 def run(parser, args):
@@ -139,7 +139,7 @@ def run(parser, args):
 	tot_reads_per_pore = Counter()
 	tot_bp_per_pore = Counter()
 
-	print "\t".join(['channel_number', 'start_time', 'duration'])
+	print("\t".join(['channel_number', 'start_time', 'duration']))
 	for fast5 in Fast5File.Fast5FileSet(args.files):
 		if fast5.is_open:
 			fq = fast5.get_fastq()
@@ -155,10 +155,10 @@ def run(parser, args):
 			tot_bp_per_pore[int(pore_id)] += len(fq.seq)
 
 			lt = localtime(start_time)
-			print "\t".join([
+			print("\t".join([
 				str(pore_id),
 				str(start_time),
-				str(fast5.get_duration())])
+				str(fast5.get_duration())]))
 			fast5.close()
 
 	if args.plot_type == 'read_count':

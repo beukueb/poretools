@@ -1,4 +1,4 @@
-import Fast5File
+from . import Fast5File
 from time import strftime, localtime
 import rpy2.robjects.lib.ggplot2 as ggplot2
 import rpy2.robjects as robjects
@@ -36,9 +36,9 @@ def plot_collectors_curve(args, start_times, read_lengths):
 
 	step = args.skip
 	# make a data frame of the lists
-	d = {'start': robjects.FloatVector([r_start_times[n] for n in xrange(0, len(r_start_times), step)]), 
-		'lengths': robjects.IntVector([r_read_lengths[n] for n in xrange(0, len(r_read_lengths), step)]),
-		'cumul': robjects.IntVector([cumulative[n] for n in xrange(0, len(cumulative), step)])}
+	d = {'start': robjects.FloatVector([r_start_times[n] for n in range(0, len(r_start_times), step)]), 
+		'lengths': robjects.IntVector([r_read_lengths[n] for n in range(0, len(r_read_lengths), step)]),
+		'cumul': robjects.IntVector([cumulative[n] for n in range(0, len(cumulative), step)])}
 	df = robjects.DataFrame(d)
 
 
@@ -88,7 +88,7 @@ def plot_collectors_curve(args, start_times, read_lengths):
 		pp.plot()
 		# keep the plot open until user hits enter
 		print('Type enter to exit.')
-		raw_input()
+		input()
 
 def run(parser, args):
 	

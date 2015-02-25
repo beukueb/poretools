@@ -1,5 +1,5 @@
 import sys
-import Fast5File
+from . import Fast5File
 import rpy2.robjects as robjects
 import rpy2.robjects.lib.ggplot2 as ggplot2
 from rpy2.robjects.packages import importr
@@ -56,7 +56,7 @@ def plot_hist(sizes, args):
 		pp.plot()
 		# keep the plot open until user hits enter
 		print('Type enter to exit.')
-		raw_input()
+		input()
 
 def run(parser, args):
 	sizes = []

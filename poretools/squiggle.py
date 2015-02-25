@@ -8,7 +8,7 @@ from rpy2.robjects.packages import importr
 import logging
 logger = logging.getLogger('poretools')
 
-import Fast5File
+from . import Fast5File
 
 def plot_squiggle(args, filename, start_times, mean_signals):
 	"""
@@ -69,7 +69,7 @@ def plot_squiggle(args, filename, start_times, mean_signals):
 		pp.plot()
 		# keep the plot open until user hits enter
 		print('Type enter to exit.')
-		raw_input()
+		input()
 
 def do_plot_squiggle(args, fast5):
 	start_times = []
@@ -92,7 +92,7 @@ def run(parser, args):
 
 	fast5_set = Fast5File.Fast5FileSet(args.files)
 
-	first_fast5 = fast5_set.next()
+	first_fast5 = next(fast5_set)
 	for fast5 in fast5_set:
 		# only create a squiggle plot for multiple reads if saving to file.
 		if args.saveas is None:

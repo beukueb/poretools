@@ -11,8 +11,8 @@ logger = logging.getLogger('poretools')
 
 
 # poretools imports
-import formats
-from Event import Event
+from . import formats
+from .Event import Event
 
 fastq_paths = {'template' : '/Analyses/Basecall_2D_000/BaseCalled_template',
                'complement' : '/Analyses/Basecall_2D_000/BaseCalled_complement',
@@ -44,9 +44,9 @@ class Fast5FileSet(object):
 	def __iter__(self):
 		return self
 
-	def next(self):
+	def __next__(self):
 		try:
-			return Fast5File(self.files.next())
+			return Fast5File(next(self.files))
 		except Exception as e:
 			# cleanup our mess
 			if self.set_type ==	 FAST5SET_TARBALL:
@@ -125,7 +125,7 @@ class Fast5File(object):
 		try:
 			self.hdf5file = pyhdf5.open_file(self.filename, 'r')
 			return True
-		except Exception, e:
+		except Exception as e:
 			logger.warning("Cannot open file: %s. Perhaps it is corrupt? Moving on.\n" % self.filename)
 			return False
 			
@@ -451,26 +451,26 @@ class Fast5File(object):
 		"""
 		Return the sequence in the FAST5 file in FASTQ format
 		"""
-		for id, h5path in fastq_paths.iteritems(): 
+		for id, h5path in fastq_paths.items(): 
 			try:
 				table = self.hdf5file.getNode(h5path)
 				fq = formats.Fastq(table.Fastq[()])
 				fq.name += "_" + id + ":" + self.filename
 				self.fastqs[id] = fq
-			except Exception, e:
+			except Exception as e:
 				pass
 
 	def _extract_fastas_from_fast5(self):
 		"""
 		Return the sequence in the FAST5 file in FASTA format
 		"""
-		for id, h5path in fastq_paths.iteritems(): 
+		for id, h5path in fastq_paths.items(): 
 			try:
 				table = self.hdf5file.getNode(h5path)
 				fa = formats.Fasta(table.Fastq[()])
 				fa.name += "_" + id + " " + self.filename
 				self.fastas[id] = fa
-			except Exception, e:
+			except Exception as e:
 				pass
 
 	def _extract_template_events(self):
@@ -480,7 +480,7 @@ class Fast5File(object):
 		try:
 			table = self.hdf5file.getNode(fastq_paths['template'])
 			self.template_events = [Event(x) for x in table.Events]
-		except Exception, e:
+		except Exception as e:
 			self.template_events = []
 
 	def _extract_complement_events(self):
@@ -490,15 +490,15 @@ class Fast5File(object):
 		try:
 			table = self.hdf5file.getNode(fastq_paths['complement'])
 			self.complement_events = [Event(x) for x in table.Events]
-		except Exception, e:
+		except Exception as e:
 			self.complement_events = []
 
 	def _get_metadata(self):
 		try:
 			self.keyinfo = self.hdf5file.getNode('/UniqueGlobalKey')
-		except Exception, e:
+		except Exception as e:
 			try:
 				self.keyinfo = self.hdf5file.getNode('/Key')
-			except Exception, e:
+			except Exception as e:
 				self.keyinfo = None
 				logger.warning("Cannot find keyinfo. Exiting.\n")

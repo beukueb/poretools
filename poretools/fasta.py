@@ -1,4 +1,4 @@
-import Fast5File
+from . import Fast5File
 import sys
 
 def run(parser, args):
@@ -40,7 +40,7 @@ def run(parser, args):
 			len(fa.seq) < args.min_length:			
 				continue
 
-			print fa
+			print(fa)
 
 		fast5.close()
 
