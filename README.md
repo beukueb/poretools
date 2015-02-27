@@ -1,5 +1,7 @@
 ### poretools: a toolkit for working with nanopore sequencing data from Oxford Nanopore.
 
+**Note:** This fork merely aims to port poretools to python3
+
 *Nick Loman and Aaron Quinlan*
 
 **Note:** this software is in an alpha state; the code is changing rapidly and the API and CLI may change at any time.
